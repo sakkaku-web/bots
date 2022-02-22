@@ -1,6 +1,45 @@
 {
   "version": 2,
   "projects": {
+    "cloud-bots": {
+      "projectType": "application",
+      "root": "apps/cloud-bots",
+      "sourceRoot": "apps/cloud-bots/src",
+      "targets": {
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/cloud-bots",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk deploy --require-approval=never; else cdk deploy --require-approval=never {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "destroy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/cloud-bots",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk destroy -f; else cdk destroy -f {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/cloud-bots"
+          ],
+          "options": {
+            "jestConfig": "apps/cloud-bots/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "what-day-bot": {
       "root": "libs/what-day-bot",
       "sourceRoot": "libs/what-day-bot/src",

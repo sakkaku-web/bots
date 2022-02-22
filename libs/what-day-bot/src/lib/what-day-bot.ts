@@ -25,7 +25,6 @@ export const handler = async () => {
       const dateStr = formatDate(date);
       const foundLine = lines.find((line) => line.includes(dateStr));
       if (foundLine) {
-        console.log(foundLine.split('-')[1].split('、'));
         const days = foundLine
           .split('-')[1]
           .split('、')
@@ -45,4 +44,4 @@ export const handler = async () => {
 };
 
 // For testing locally
-handler();
+// handler();

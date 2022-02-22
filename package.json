@@ -3,14 +3,16 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
+    "deploy": "npm run package && nx run cloud-bots:deploy",
+    "package": "nx run-many --target=package --all"
   },
   "private": true,
   "devDependencies": {
+    "@aws-cdk/assert": "^1.46.0",
+    "@aws-cdk/aws-events-targets": "^1.145.0",
     "@aws-cdk/aws-lambda": "^1.46.0",
     "@aws-cdk/aws-lambda-nodejs": "^1.46.0",
+    "@aws-cdk/core": "^1.46.0",
     "@myin/aws-cdk": "^0.0.11",
     "@nrwl/cli": "12.10.1",
     "@nrwl/eslint-plugin-nx": "12.10.1",

@@ -27,6 +27,7 @@
     ]
   },
   "projects": {
+    "cloud-bots": {},
     "what-day-bot": {
       "tags": []
     }
