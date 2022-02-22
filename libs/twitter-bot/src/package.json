@@ -1,0 +1,8 @@
+{
+  "name": "twitter-bot",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "dependencies": {
+    "twitter-api-v2": "^1.11.0"
+  }
+}

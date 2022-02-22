@@ -40,6 +40,42 @@
         }
       }
     },
+    "twitter-bot": {
+      "root": "libs/twitter-bot",
+      "sourceRoot": "libs/twitter-bot/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "libs/twitter-bot/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/twitter-bot"
+          ],
+          "options": {
+            "jestConfig": "libs/twitter-bot/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "package": {
+          "executor": "@myin/aws-cdk:package",
+          "options": {
+            "entryFile": "libs/twitter-bot/src/index.ts",
+            "tsConfig": "libs/twitter-bot/tsconfig.lib.json",
+            "outputPath": "dist/libs/twitter-bot"
+          }
+        }
+      }
+    },
     "what-day-bot": {
       "root": "libs/what-day-bot",
       "sourceRoot": "libs/what-day-bot/src",

@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@what-day-bot/twitter-bot": ["libs/twitter-bot/src/index.ts"],
       "@what-day-bot/what-day-bot": ["libs/what-day-bot/src/index.ts"]
     }
   },
