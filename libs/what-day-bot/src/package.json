@@ -2,5 +2,8 @@
   "name": "what-day-bot",
   "version": "1.0.0",
   "main": "src/app.js",
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.26.0",
+    "date-fns": "^2.28.0"
+  }
 }
