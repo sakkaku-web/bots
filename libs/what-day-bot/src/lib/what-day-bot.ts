@@ -45,7 +45,7 @@ export const handler = async () => {
 
           return {
             date,
-            days,
+            days: days.slice(0, 5),
           };
         }
       })
