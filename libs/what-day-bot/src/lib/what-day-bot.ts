@@ -25,7 +25,7 @@ export const handler = async () => {
     const content = pages[Object.keys(pages)[0]].revisions[0]['*'] as string;
 
     const start = new Date();
-    const end = add(start, { days: 7 });
+    const end = add(start, { days: 5 });
     const dates = eachDayOfInterval({ start, end });
 
     const lines = content.split('\n');
@@ -41,7 +41,7 @@ export const handler = async () => {
             .map((day) => day.replace(/\[|\]/g, '').trim())
             .map((day) => day.split('（')[0])
             .map((day) => day.split('／')[0])
-            .filter((x) => !!x && x.length < 8 && x.includes('の日'));
+            .filter((x) => !!x && x.length < 10);
 
           return {
             date,
