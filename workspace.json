@@ -1,6 +1,43 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "what-day-bot": {
+      "root": "libs/what-day-bot",
+      "sourceRoot": "libs/what-day-bot/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "libs/what-day-bot/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/what-day-bot"
+          ],
+          "options": {
+            "jestConfig": "libs/what-day-bot/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "package": {
+          "executor": "@myin/aws-cdk:package",
+          "options": {
+            "entryFile": "libs/what-day-bot/src/index.ts",
+            "tsConfig": "libs/what-day-bot/tsconfig.lib.json",
+            "outputPath": "dist/libs/what-day-bot"
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
