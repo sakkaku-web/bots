@@ -70,6 +70,11 @@ export const handler = async () => {
       }
     });
 
+    while (result.length > 250) {
+      const index = result.lastIndexOf('\n');
+      result = result.substring(0, index);
+    }
+
     console.log(result);
 
     const payload = {
