@@ -21,6 +21,40 @@ const formatDateJP = (date: Date): string => {
   return format(date, 'M月d日');
 };
 
+export const parseDay = (day: string): string[] => {
+  let cleanDay = day
+    .replace(/(\{.*?\}) */g, '')
+    .replace(/\{|\}/g, '')
+    .replace('<ref>', '')
+    .replace('</ref>', '');
+  const result = [];
+
+  if (cleanDay.includes('|')) {
+    cleanDay = cleanDay.split('|')[1];
+  }
+
+  cleanDay = cleanDay.replace(/\[|\]/g, '');
+
+  if (cleanDay.includes('http')) {
+    const split = cleanDay.split('/');
+    cleanDay = split[split.length - 1];
+  }
+
+  result.push(...splitAndGetWithPrio(cleanDay, '／'));
+
+  return result.map((r) => r.replace(/(\(.*?\)) */g, '')).map((r) => r.trim());
+};
+
+const splitAndGetWithPrio = (day: string, delim: string): string[] => {
+  const split = day.split(delim);
+  const priority = split.filter((s) => s.includes('の日'));
+  if (priority.length > 0) return priority;
+
+  const secondPrio = split.filter((s) => s.includes('日'));
+  if (secondPrio.length > 0) return secondPrio;
+  return split;
+};
+
 export interface DateDay {
   date: Date;
   days: string[];
@@ -46,11 +80,8 @@ export const getDaysFor = async (
         const days = foundLine
           .split('-')[1]
           .split('、')
-          .map((day) => day.replace(/\[|\]/g, '').trim())
-          .map((day) => day.split('（')[0])
-          .map((day) => day.split('／')[0])
-          .map((day) => day.split('|')[0])
-          .map((day) => day.split('(')[0])
+          .map((day) => parseDay(day))
+          .reduce((prev, curr) => prev.concat(curr), [])
           .filter((x) => !!x);
 
         return {
