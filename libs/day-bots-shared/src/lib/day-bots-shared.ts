@@ -1,11 +1,13 @@
 import axios from 'axios';
-import { add, eachDayOfInterval, format } from 'date-fns';
+import { eachDayOfInterval, format } from 'date-fns';
 
 export const DAYS_TWEET_COUNT_TABLE = 'daysTweetCount';
 export enum DaysTweetCountColumn {
   DATE = 'date',
   YEAR = 'year',
+  DAYS = 'days',
 }
+export const DAYS_COUNT_YEAR_LATEST = '0';
 
 export const formatDateShort = (date: Date): string => {
   return format(date, 'M/d');
@@ -19,12 +21,19 @@ const formatDateJP = (date: Date): string => {
   return format(date, 'M月d日');
 };
 
-export const getDaysFor = async (start: Date) => {
+export interface DateDay {
+  date: Date;
+  days: string[];
+}
+
+export const getDaysFor = async (
+  start: Date,
+  end: Date = start
+): Promise<DateDay[]> => {
   const { data } = await axios.get(url);
   const pages = data.query.pages;
   const content = pages[Object.keys(pages)[0]].revisions[0]['*'] as string;
 
-  const end = add(start, { days: 5 });
   const dates = eachDayOfInterval({ start, end });
 
   const lines = content.split('\n');
@@ -40,11 +49,11 @@ export const getDaysFor = async (start: Date) => {
           .map((day) => day.replace(/\[|\]/g, '').trim())
           .map((day) => day.split('（')[0])
           .map((day) => day.split('／')[0])
-          .filter((x) => !!x && x.length < 10);
+          .filter((x) => !!x);
 
         return {
           date,
-          days: days.slice(0, 5),
+          days,
         };
       }
     })
@@ -52,3 +61,8 @@ export const getDaysFor = async (start: Date) => {
 
   return dateDays;
 };
+
+export interface TweetCount {
+  day: string;
+  count: number;
+}

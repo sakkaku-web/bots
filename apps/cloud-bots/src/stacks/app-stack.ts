@@ -8,7 +8,7 @@ import { join } from 'path';
 import {
   DAYS_TWEET_COUNT_TABLE,
   DaysTweetCountColumn,
-} from '@what-day-bot/day-bots-shared';
+} from '../../../../libs/day-bots-shared/src';
 
 const libsPath = '../../dist/libs';
 
@@ -16,7 +16,7 @@ export class AppStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const table = new Table(scope, 'daysTweetCount', {
+    const table = new Table(this, 'daysTweetCount', {
       tableName: DAYS_TWEET_COUNT_TABLE,
       partitionKey: {
         name: DaysTweetCountColumn.DATE,
@@ -33,6 +33,8 @@ export class AppStack extends cdk.Stack {
       environment: {
         TWITTER_API_KEY: process.env.TWITTER_API_KEY,
         TWITTER_API_SECRET: process.env.TWITTER_API_SECRET,
+        TWITTER_ACCESS: process.env.TWITTER_ACCESS_TOKEN,
+        TWITTER_SECRET: process.env.TWITTER_ACCESS_SECRET,
       },
       runtime: Runtime.NODEJS_14_X,
       code: Code.fromAsset(join(libsPath, 'twitter-bot')),
@@ -41,10 +43,6 @@ export class AppStack extends cdk.Stack {
     });
 
     const whatDayBotFunction = new Function(this, 'whatDayBotFunction', {
-      environment: {
-        TWITTER_ACCESS: process.env.TWITTER_ACCESS_TOKEN,
-        TWITTER_SECRET: process.env.TWITTER_ACCESS_SECRET,
-      },
       runtime: Runtime.NODEJS_14_X,
       code: Code.fromAsset(join(libsPath, 'what-day-bot')),
       handler: 'what-day-bot.handler',
@@ -67,10 +65,12 @@ export class AppStack extends cdk.Stack {
       }
     );
     twitterBotFunction.grantInvoke(dayTrendingBotFunction);
+    table.grantWriteData(dayTrendingBotFunction);
 
     const dailyRule = new Rule(this, 'dailyCron', {
       schedule: Schedule.cron({ minute: '0', hour: '0' }),
     });
     dailyRule.addTarget(new LambdaFunction(whatDayBotFunction));
+    dailyRule.addTarget(new LambdaFunction(dayTrendingBotFunction));
   }
 }
