@@ -5,6 +5,10 @@ import { Table, AttributeType } from '@aws-cdk/aws-dynamodb';
 import { Rule, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { join } from 'path';
+import {
+  DAYS_TWEET_COUNT_TABLE,
+  DaysTweetCountColumn,
+} from '@what-day-bot/day-bots-shared';
 
 const libsPath = '../../dist/libs';
 
@@ -13,13 +17,13 @@ export class AppStack extends cdk.Stack {
     super(scope, id, props);
 
     const table = new Table(scope, 'daysTweetCount', {
-      tableName: 'daysTweetCount',
+      tableName: DAYS_TWEET_COUNT_TABLE,
       partitionKey: {
-        name: 'date',
+        name: DaysTweetCountColumn.DATE,
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: 'year',
+        name: DaysTweetCountColumn.YEAR,
         type: AttributeType.NUMBER,
       },
     });
@@ -48,6 +52,21 @@ export class AppStack extends cdk.Stack {
     });
     twitterBotFunction.grantInvoke(whatDayBotFunction);
     table.grantReadData(whatDayBotFunction);
+
+    const dayTrendingBotFunction = new Function(
+      this,
+      'dayTrendingBotFunction',
+      {
+        environment: {
+          TWITTER_BEARER: process.env.TWITTER_BEARER,
+        },
+        runtime: Runtime.NODEJS_14_X,
+        code: Code.fromAsset(join(libsPath, 'day-trending-bot')),
+        handler: 'day-trending-bot.handler',
+        logRetention: RetentionDays.ONE_MONTH,
+      }
+    );
+    twitterBotFunction.grantInvoke(dayTrendingBotFunction);
 
     const dailyRule = new Rule(this, 'dailyCron', {
       schedule: Schedule.cron({ minute: '0', hour: '0' }),

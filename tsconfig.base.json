@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@what-day-bot/day-bots-shared": ["libs/day-bots-shared/src/index.ts"],
+      "@what-day-bot/day-trending-bot": ["libs/day-trending-bot/src/index.ts"],
       "@what-day-bot/twitter-bot": ["libs/twitter-bot/src/index.ts"],
       "@what-day-bot/what-day-bot": ["libs/what-day-bot/src/index.ts"]
     }

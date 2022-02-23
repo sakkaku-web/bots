@@ -28,6 +28,12 @@
   },
   "projects": {
     "cloud-bots": {},
+    "day-bots-shared": {
+      "tags": []
+    },
+    "day-trending-bot": {
+      "tags": []
+    },
     "twitter-bot": {
       "tags": []
     },

@@ -30,12 +30,62 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/cloud-bots"
-          ],
+          "outputs": ["coverage/apps/cloud-bots"],
           "options": {
             "jestConfig": "apps/cloud-bots/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "day-bots-shared": {
+      "root": "libs/day-bots-shared",
+      "sourceRoot": "libs/day-bots-shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/day-bots-shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/day-bots-shared"],
+          "options": {
+            "jestConfig": "libs/day-bots-shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "day-trending-bot": {
+      "root": "libs/day-trending-bot",
+      "sourceRoot": "libs/day-trending-bot/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/day-trending-bot/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/day-trending-bot"],
+          "options": {
+            "jestConfig": "libs/day-trending-bot/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "package": {
+          "executor": "@myin/aws-cdk:package",
+          "options": {
+            "entryFile": "libs/day-trending-bot/src/index.ts",
+            "tsConfig": "libs/day-trending-bot/tsconfig.lib.json",
+            "outputPath": "dist/libs/day-trending-bot"
           }
         }
       }
@@ -47,20 +97,14 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/twitter-bot/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/twitter-bot/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/twitter-bot"
-          ],
+          "outputs": ["coverage/libs/twitter-bot"],
           "options": {
             "jestConfig": "libs/twitter-bot/jest.config.js",
             "passWithNoTests": true
@@ -83,20 +127,14 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/what-day-bot/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/what-day-bot/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/what-day-bot"
-          ],
+          "outputs": ["coverage/libs/what-day-bot"],
           "options": {
             "jestConfig": "libs/what-day-bot/jest.config.js",
             "passWithNoTests": true
