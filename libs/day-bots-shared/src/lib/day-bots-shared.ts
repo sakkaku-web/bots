@@ -49,6 +49,8 @@ export const getDaysFor = async (
           .map((day) => day.replace(/\[|\]/g, '').trim())
           .map((day) => day.split('（')[0])
           .map((day) => day.split('／')[0])
+          .map((day) => day.split('|')[0])
+          .map((day) => day.split('(')[0])
           .filter((x) => !!x);
 
         return {

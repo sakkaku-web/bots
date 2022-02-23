@@ -6,7 +6,7 @@ import {
   getDaysFor,
   TweetCount,
 } from '@what-day-bot/day-bots-shared';
-import { startOfYesterday } from 'date-fns';
+import { isValid, sub } from 'date-fns';
 import { TwitterApi } from 'twitter-api-v2';
 import {
   InvocationType,
@@ -15,12 +15,17 @@ import {
 } from '@aws-sdk/client-lambda';
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
+const TWEET_COUNT_SAVE_LIMIT = 500;
+
 const saveDaysTweetCount = async (date: Date, tweetCounts: TweetCount[]) => {
+  const countSave = tweetCounts.filter((c) => c.count > TWEET_COUNT_SAVE_LIMIT);
+  if (countSave.length === 0) return;
+
   const Item = {
     [DaysTweetCountColumn.DATE]: { S: formatDateShort(date) },
     [DaysTweetCountColumn.YEAR]: { N: DAYS_COUNT_YEAR_LATEST },
     [DaysTweetCountColumn.DAYS]: {
-      S: JSON.stringify(tweetCounts.filter((c) => c.count > 500)),
+      S: JSON.stringify(countSave),
     },
   };
 
@@ -34,7 +39,7 @@ const saveDaysTweetCount = async (date: Date, tweetCounts: TweetCount[]) => {
 };
 
 const postTrendingDays = async (date: Date, tweetCounts: TweetCount[]) => {
-  let result = `Trending ${date.getFullYear()}: ${formatDateShort(date)}\n`;
+  let result = `🔥 Trending ${date.getFullYear()}: ${formatDateShort(date)}\n`;
 
   tweetCounts
     .sort((a, b) => b.count - a.count)
@@ -42,6 +47,8 @@ const postTrendingDays = async (date: Date, tweetCounts: TweetCount[]) => {
     .forEach((dayCount) => {
       result += `#${dayCount.day}: ${dayCount.count}\n`;
     });
+
+  console.log(result);
 
   const lambda = new LambdaClient({});
   await lambda.send(
@@ -70,10 +77,16 @@ const getTweetCountForDate = async (date: Date): Promise<TweetCount[]> => {
   return tweetCounts;
 };
 
-export const handler = async () => {
+export const handler = async (event) => {
+  let date = new Date(event.time);
+  if (!isValid(date)) {
+    date = new Date();
+  }
+
   try {
-    const yesterday = startOfYesterday();
+    const yesterday = sub(date, { days: 1 });
     const tweetCounts = await getTweetCountForDate(yesterday);
+
     await saveDaysTweetCount(yesterday, tweetCounts);
     await postTrendingDays(yesterday, tweetCounts);
   } catch (err) {

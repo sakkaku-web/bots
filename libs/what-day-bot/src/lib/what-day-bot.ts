@@ -1,4 +1,4 @@
-import { add, isToday } from 'date-fns';
+import { add, isToday, isValid } from 'date-fns';
 import {
   InvocationType,
   InvokeCommand,
@@ -19,15 +19,16 @@ const postDays = async (dateDays: DateDay[], dayLimit = 4) => {
   let result = '';
   dateDays.forEach((dateDay) => {
     const dateStr = formatDateShort(dateDay.date);
+    const days = dateDay.days.slice(0, dayLimit);
 
     if (isToday(dateDay.date)) {
-      result = `${dateStr}\n`;
-      dateDay.days.slice(0, dayLimit).forEach((day) => {
+      result = `📢 ${dateStr}\n`;
+      days.forEach((day) => {
         result += `#${day}\n`;
       });
-      result += '\n';
+      result += '\n🔜\n';
     } else {
-      result += `${dateStr}: ${dateDay.days.join(', ')}\n`;
+      result += `${dateStr}: ${days.join(', ')}\n`;
     }
   });
 
@@ -90,10 +91,14 @@ const sortDaysBasedOnLastYearTrends = async (dateDays: DateDay[]) => {
   });
 };
 
-export const handler = async () => {
+export const handler = async (event) => {
+  let date = new Date(event.time);
+  if (!isValid(date)) {
+    date = new Date();
+  }
+
   try {
-    const today = new Date();
-    const dateDays = await getDaysFor(today, add(today, { days: 5 }));
+    const dateDays = await getDaysFor(date, add(date, { days: 5 }));
     if (dateDays.length === 0) {
       return 'No special days';
     }
