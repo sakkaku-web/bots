@@ -6,7 +6,7 @@ import {
   getDaysFor,
   TweetCount,
 } from '@what-day-bot/day-bots-shared';
-import { isValid, sub } from 'date-fns';
+import { endOfDay, isValid, startOfDay, sub } from 'date-fns';
 import { TwitterApi } from 'twitter-api-v2';
 import {
   InvocationType,
@@ -66,7 +66,10 @@ const getTweetCountForDate = async (date: Date): Promise<TweetCount[]> => {
   const twitter = new TwitterApi(process.env.TWITTER_BEARER);
   const tweetCounts = await Promise.all(
     days[0].days.map(async (day) => {
-      const tweetCount = await twitter.v2.tweetCountRecent(`#${day}`);
+      const tweetCount = await twitter.v2.tweetCountRecent(`#${day}`, {
+        start_time: startOfDay(date).toISOString(),
+        end_time: endOfDay(date).toISOString(),
+      });
       return {
         day,
         count: tweetCount.meta.total_tweet_count,
