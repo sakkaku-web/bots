@@ -9,6 +9,7 @@
   "private": true,
   "devDependencies": {
     "@aws-cdk/assert": "^1.46.0",
+    "@aws-cdk/aws-dynamodb": "^1.145.0",
     "@aws-cdk/aws-events-targets": "^1.145.0",
     "@aws-cdk/aws-lambda": "^1.46.0",
     "@aws-cdk/aws-lambda-nodejs": "^1.46.0",
