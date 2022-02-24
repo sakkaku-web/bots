@@ -15,11 +15,19 @@ import {
   TweetCount,
 } from '@what-day-bot/day-bots-shared';
 
-const postDays = async (dateDays: DateDay[], dayLimit = 4) => {
+const POPULAR_TWEET_COUNT = 1_000_000;
+
+const postDays = async (
+  popular: string[],
+  dateDays: DateDay[],
+  dayLimit = 4
+) => {
   let result = '';
   dateDays.forEach((dateDay) => {
     const dateStr = formatDateShort(dateDay.date);
-    const days = dateDay.days.slice(0, dayLimit);
+    const days = dateDay.days
+      .slice(0, dayLimit)
+      .map((day) => (popular.includes(day) ? `🔥${day}` : day));
 
     if (isToday(dateDay.date)) {
       result = `📢 ${dateStr}\n`;
@@ -49,7 +57,9 @@ const postDays = async (dateDays: DateDay[], dayLimit = 4) => {
   );
 };
 
-const sortDaysBasedOnLastYearTrends = async (dateDays: DateDay[]) => {
+const sortDaysBasedOnLastYearTrends = async (
+  dateDays: DateDay[]
+): Promise<string[]> => {
   const dynamo = new DynamoDBClient({});
 
   const batchGet = new BatchGetItemCommand({
@@ -68,6 +78,7 @@ const sortDaysBasedOnLastYearTrends = async (dateDays: DateDay[]) => {
     console.log('Unprocessed', UnprocessedKeys);
   }
 
+  const popular = [];
   const counts = {};
   Responses[DAYS_TWEET_COUNT_TABLE].forEach((data) => {
     const days = {};
@@ -77,6 +88,10 @@ const sortDaysBasedOnLastYearTrends = async (dateDays: DateDay[]) => {
 
     tweetCounts.forEach((tweetCount) => {
       days[tweetCount.day] = tweetCount.count;
+
+      if (tweetCount.count >= POPULAR_TWEET_COUNT) {
+        popular.push(tweetCount.day);
+      }
     });
 
     counts[data[DaysTweetCountColumn.DATE].S] = days;
@@ -89,6 +104,8 @@ const sortDaysBasedOnLastYearTrends = async (dateDays: DateDay[]) => {
 
     dateDay.days.sort((a, b) => getCount(b) - getCount(a));
   });
+
+  return popular;
 };
 
 export const handler = async (event) => {
@@ -103,8 +120,8 @@ export const handler = async (event) => {
       return 'No special days';
     }
 
-    await sortDaysBasedOnLastYearTrends(dateDays);
-    await postDays(dateDays);
+    const popular = await sortDaysBasedOnLastYearTrends(dateDays);
+    await postDays(popular, dateDays);
   } catch (err) {
     console.log(err);
   }
