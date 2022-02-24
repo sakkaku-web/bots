@@ -90,6 +90,10 @@ export const handler = async (event) => {
     const yesterday = sub(date, { days: 1 });
     const tweetCounts = await getTweetCountForDate(yesterday);
 
+    if (tweetCounts.length === 0) {
+      return 'No tweet counts';
+    }
+
     await saveDaysTweetCount(yesterday, tweetCounts);
     await postTrendingDays(yesterday, tweetCounts);
   } catch (err) {
