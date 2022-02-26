@@ -55,8 +55,8 @@ export class AppStack extends cdk.Stack {
     const whatDayBotFunction = new Function(this, 'whatDayBotFunction', {
       runtime: Runtime.NODEJS_14_X,
       environment: {
-        TWITTER_ACCESS: process.env.TWITTER_ACCESS_TOKEN,
-        TWITTER_SECRET: process.env.TWITTER_ACCESS_SECRET,
+        TWITTER_ACCESS: process.env.TWITTER_WHATDAY_TOKEN,
+        TWITTER_SECRET: process.env.TWITTER_WHATDAY_SECRET,
       },
       code: Code.fromAsset(join(libsPath, 'what-day-bot')),
       handler: 'what-day-bot.handler',
@@ -71,8 +71,8 @@ export class AppStack extends cdk.Stack {
       {
         environment: {
           TWITTER_BEARER: process.env.TWITTER_BEARER,
-          TWITTER_ACCESS: process.env.TWITTER_ACCESS_TOKEN,
-          TWITTER_SECRET: process.env.TWITTER_ACCESS_SECRET,
+        TWITTER_ACCESS: process.env.TWITTER_WHATDAY_TOKEN,
+        TWITTER_SECRET: process.env.TWITTER_WHATDAY_SECRET,
         },
         runtime: Runtime.NODEJS_14_X,
         code: Code.fromAsset(join(libsPath, 'day-trending-bot')),
