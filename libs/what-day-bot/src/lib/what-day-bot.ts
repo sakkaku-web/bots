@@ -51,7 +51,13 @@ const postDays = async (
   await lambda.send(
     new InvokeCommand({
       FunctionName: 'twitterBot',
-      Payload: Buffer.from(JSON.stringify({ text: result })),
+      Payload: Buffer.from(
+        JSON.stringify({
+          text: result,
+          accessToken: process.env.TWITTER_ACCESS,
+          accessSecret: process.env.TWITTER_SECRET,
+        })
+      ),
       InvocationType: InvocationType.Event,
     })
   );

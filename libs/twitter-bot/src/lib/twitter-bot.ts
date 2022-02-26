@@ -5,8 +5,8 @@ export const handler = async (event: TweetEvent) => {
     const api = new TwitterApi({
       appKey: process.env.TWITTER_API_KEY,
       appSecret: process.env.TWITTER_API_SECRET,
-      accessToken: process.env.TWITTER_ACCESS,
-      accessSecret: process.env.TWITTER_SECRET,
+      accessToken: event.accessToken,
+      accessSecret: event.accessSecret,
     });
 
     await api.v2.tweet(event.text);
@@ -17,4 +17,6 @@ export const handler = async (event: TweetEvent) => {
 
 export interface TweetEvent {
   text: string;
+  accessToken: string;
+  accessSecret: string;
 }
