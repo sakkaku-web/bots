@@ -2,7 +2,6 @@ import {
   DaysTweetCountColumn,
   DAYS_COUNT_YEAR_LATEST,
   DAYS_TWEET_COUNT_TABLE,
-  formatDateShort,
   getDaysFor,
   TweetCount,
 } from '@what-day-bot/day-bots-shared';
@@ -14,6 +13,7 @@ import {
   LambdaClient,
 } from '@aws-sdk/client-lambda';
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { formatDateShort } from '@what-day-bot/common-shared';
 
 const TWEET_COUNT_SAVE_LIMIT = 500;
 

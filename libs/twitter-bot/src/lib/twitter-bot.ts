@@ -1,5 +1,8 @@
 import { TwitterApi } from 'twitter-api-v2';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export const handler = async (event: TweetEvent) => {
   try {
     const api = new TwitterApi({

@@ -38,6 +38,28 @@
         }
       }
     },
+    "common-shared": {
+      "root": "libs/common-shared",
+      "sourceRoot": "libs/common-shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/common-shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/common-shared"],
+          "options": {
+            "jestConfig": "libs/common-shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "day-bots-shared": {
       "root": "libs/day-bots-shared",
       "sourceRoot": "libs/day-bots-shared/src",
@@ -86,6 +108,36 @@
             "entryFile": "libs/day-trending-bot/src/index.ts",
             "tsConfig": "libs/day-trending-bot/tsconfig.lib.json",
             "outputPath": "dist/libs/day-trending-bot"
+          }
+        }
+      }
+    },
+    "holo-bday-bot": {
+      "root": "libs/holo-bday-bot",
+      "sourceRoot": "libs/holo-bday-bot/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/holo-bday-bot/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/holo-bday-bot"],
+          "options": {
+            "jestConfig": "libs/holo-bday-bot/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "package": {
+          "executor": "@myin/aws-cdk:package",
+          "options": {
+            "entryFile": "libs/holo-bday-bot/src/index.ts",
+            "tsConfig": "libs/holo-bday-bot/tsconfig.lib.json",
+            "outputPath": "dist/libs/holo-bday-bot"
           }
         }
       }
@@ -146,6 +198,28 @@
             "entryFile": "libs/what-day-bot/src/index.ts",
             "tsConfig": "libs/what-day-bot/tsconfig.lib.json",
             "outputPath": "dist/libs/what-day-bot"
+          }
+        }
+      }
+    },
+    "wikipedia-utils": {
+      "root": "libs/wikipedia-utils",
+      "sourceRoot": "libs/wikipedia-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/wikipedia-utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/wikipedia-utils"],
+          "options": {
+            "jestConfig": "libs/wikipedia-utils/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

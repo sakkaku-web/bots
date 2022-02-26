@@ -28,16 +28,25 @@
   },
   "projects": {
     "cloud-bots": {},
+    "common-shared": {
+      "tags": []
+    },
     "day-bots-shared": {
       "tags": []
     },
     "day-trending-bot": {
       "tags": []
     },
+    "holo-bday-bot": {
+      "tags": []
+    },
     "twitter-bot": {
       "tags": []
     },
     "what-day-bot": {
+      "tags": []
+    },
+    "wikipedia-utils": {
       "tags": []
     }
   }

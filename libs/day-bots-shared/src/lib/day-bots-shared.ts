@@ -1,5 +1,5 @@
 import { eachDayOfInterval, format } from 'date-fns';
-import { getLatestRevision } from './wikipedia';
+import { getLatestRevision, getLinkText } from '../../../wikipedia-utils/src';
 
 export const DAYS_TWEET_COUNT_TABLE = 'daysTweetCount';
 export enum DaysTweetCountColumn {
@@ -8,10 +8,6 @@ export enum DaysTweetCountColumn {
   DAYS = 'days',
 }
 export const DAYS_COUNT_YEAR_LATEST = '0';
-
-export const formatDateShort = (date: Date): string => {
-  return format(date, 'M/d');
-};
 
 const formatDateJP = (date: Date): string => {
   return format(date, 'M月d日');
@@ -25,11 +21,7 @@ export const parseDay = (day: string): string[] => {
     .replace('</ref>', '');
   const result = [];
 
-  if (cleanDay.includes('|')) {
-    cleanDay = cleanDay.split('|')[1];
-  }
-
-  cleanDay = cleanDay.replace(/\[|\]/g, '');
+  cleanDay = getLinkText(cleanDay);
 
   if (cleanDay.includes('http')) {
     const split = cleanDay.split('/');

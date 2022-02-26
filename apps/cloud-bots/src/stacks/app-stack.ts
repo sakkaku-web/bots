@@ -40,6 +40,18 @@ export class AppStack extends cdk.Stack {
       logRetention: RetentionDays.ONE_MONTH,
     });
 
+    const holoBdayBotFunction = new Function(this, 'holoBdayBotFunction', {
+      runtime: Runtime.NODEJS_14_X,
+      environment: {
+        TWITTER_ACCESS: process.env.TWITTER_BDAY_TOKEN,
+        TWITTER_SECRET: process.env.TWITTER_BDAY_SECRET,
+      },
+      code: Code.fromAsset(join(libsPath, 'holo-bday-bot')),
+      handler: 'holo-bday-bot.handler',
+      logRetention: RetentionDays.ONE_MONTH,
+    });
+    twitterBotFunction.grantInvoke(holoBdayBotFunction);
+
     const whatDayBotFunction = new Function(this, 'whatDayBotFunction', {
       runtime: Runtime.NODEJS_14_X,
       environment: {
@@ -76,5 +88,6 @@ export class AppStack extends cdk.Stack {
     });
     dailyRule.addTarget(new LambdaFunction(whatDayBotFunction));
     dailyRule.addTarget(new LambdaFunction(dayTrendingBotFunction));
+    dailyRule.addTarget(new LambdaFunction(holoBdayBotFunction));
   }
 }

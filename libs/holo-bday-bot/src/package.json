@@ -1,0 +1,10 @@
+{
+  "name": "holo-bday-bot",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "date-fns": "^2.28.0",
+    "@aws-sdk/client-lambda": "^3.52.0"
+  }
+}

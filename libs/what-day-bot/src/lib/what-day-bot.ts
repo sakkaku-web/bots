@@ -10,10 +10,10 @@ import {
   DaysTweetCountColumn,
   DAYS_COUNT_YEAR_LATEST,
   DAYS_TWEET_COUNT_TABLE,
-  formatDateShort,
   getDaysFor,
   TweetCount,
 } from '@what-day-bot/day-bots-shared';
+import { formatDateShort } from '@what-day-bot/common-shared';
 
 const POPULAR_TWEET_COUNT = 1_000_000;
 
