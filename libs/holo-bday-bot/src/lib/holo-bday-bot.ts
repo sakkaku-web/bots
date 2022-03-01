@@ -84,7 +84,7 @@ export const handler = async (event) => {
       }
     });
 
-    text += '#hololive';
+    text += '#hololive #ホロライブ';
 
     console.log(text);
 
