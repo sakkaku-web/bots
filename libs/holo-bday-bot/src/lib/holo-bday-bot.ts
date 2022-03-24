@@ -68,7 +68,7 @@ export const handler = async (event) => {
   }
 
   try {
-    const birthdays = await getBirthdays(date, add(date, { days: 5 }));
+    const birthdays = await getBirthdays(date, add(date, { days: 7 }));
 
     let text = '';
 
@@ -83,6 +83,10 @@ export const handler = async (event) => {
         text += day + ': ' + birthdays[day].join(', ') + '\n';
       }
     });
+
+    if (text === '') {
+      return 'No birthdays';
+    }
 
     text += '#hololive #ホロライブ';
 
