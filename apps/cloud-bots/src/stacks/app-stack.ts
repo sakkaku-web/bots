@@ -85,6 +85,7 @@ export class AppStack extends cdk.Stack {
 
     const dailyRule = new Rule(this, 'dailyCron', {
       schedule: Schedule.cron({ minute: '0', hour: '0' }),
+      enabled: false,
     });
     dailyRule.addTarget(new LambdaFunction(whatDayBotFunction));
     dailyRule.addTarget(new LambdaFunction(dayTrendingBotFunction));
